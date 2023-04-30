@@ -1,0 +1,7 @@
+sample	sra_accession	group
+FL01	SRR17655904	flower
+FL02	SRR17655903	flower
+FL03	SRR17655908	flower
+FR01	SRR17655900	fruit
+FR02	SRR17655901	fruit
+FR03	SRR17655902	fruit

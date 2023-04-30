@@ -1,0 +1,81 @@
+mkdir assignment
+
+cd assignment
+
+wget http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.39.zip
+unzip Trimmomatic-0.39.zip 
+
+java -jar ./Trimmomatic-0.39/trimmomatic-0.39.jar SE flower_SRR17655902.fastq.gz flower_SRR17655902.trim.fastq.gz ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq3-SE.fa:2:30:10 HEADCROP:60 SLIDINGWINDOW:4:15 MINLEN:70
+
+java -jar ./Trimmomatic-0.39/trimmomatic-0.39.jar SE flower_SRR17655903.fastq.gz flower_SRR17655903.trim.fastq.gz 
+ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq3-SE.fa:2:30:10 HEADCROP:60 SLIDINGWINDOW:4:15 MINLEN:70
+
+java -jar ./Trimmomatic-0.39/trimmomatic-0.39.jar SE flower_SRR17655908.fastq.gz flower_SRR17655908.trim.fastq.gz 
+ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq3-SE.fa:2:30:10 HEADCROP:60 SLIDINGWINDOW:4:15 MINLEN:70
+
+java -jar ./Trimmomatic-0.39/trimmomatic-0.39.jar SE fruit_SRR17655900.fastq.gz fruit_SRR17655901.trim.fastq.gz 
+ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq3-SE.fa:2:30:10 HEADCROP:60 SLIDINGWINDOW:4:15 MINLEN:70
+
+java -jar ./Trimmomatic-0.39/trimmomatic-0.39.jar SE fruit_SRR17655901.fastq.gz fruit_SRR17655901.trim.fastq.gz 
+ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq3-SE.fa:2:30:10 HEADCROP:60 SLIDINGWINDOW:4:15 MINLEN:70
+
+java -jar ./Trimmomatic-0.39/trimmomatic-0.39.jar SE fruit_SRR17655904.fastq.gz fruit_SRR17655904.trim.fastq.gz 
+ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq3-SE.fa:2:30:10 HEADCROP:60SLIDINGWINDOW:4:15 MINLEN:70
+
+
+HISAT2 MAPPING
+wget https://cloud.biohpc.swmed.edu/index.php/s/oTtGWbWjaxsQ2Ho/download
+unzip download 
+wget https://solgenomics.net/ftp/genomes/Solanum_lycopersicoides/SlydLA2951_v2.0/SlydLA2951_v2.0_chromosomes.fasta 
+
+./hisat2-2.2.1/hisat2 SlydLA2951_v2.0_chromosomes.fasta PERSI 
+
+./hisat2-2.2.1/hisat2 -x PERSI -U flower_SRR17655902.trim.fastq.gz -p 4 -S flower_SRR17655902.sam 
+./hisat2-2.2.1/hisat2 -x PERSI -U flower_SRR17655903.trim.fastq.gz -p 4 -S flower_SRR17655903.sam 
+./hisat2-2.2.1/hisat2 -x PERSI -U flower_SRR17655908.trim.fastq.gz -p 4 -S flower_SRR17655908.sam 
+./hisat2-2.2.1/hisat2 -x PERSI -U fruit_SRR17655900.trim.fastq.gz -p 4 -S fruit_SRR17655900.sam
+./hisat2-2.2.1/hisat2 -x PERSI -U fruit_SRR17655901.trim.fastq.gz -p 4 -S fruit_SRR17655901.sam 
+./hisat2-2.2.1/hisat2 -x PERSI -U fruit_SRR17655904.trim.fastq.gz -p 4 -S fruit_SRR17655904.sam 
+
+fastqc *.gz -t 4
+
+kallisto index -i Solanum_lycopersicum.SL3.0.cdna.all.index Solanum_lycopersicum.SL3.0.cdna.all.fa.gz
+
+kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index -o k_flower_SRR17655902  --single -l 180 -s 20 flower_SRR17655902.trim.fastq.gz
+kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index -o k_flower_SRR17655903 --single -l 180 -s 20 flower_SRR17655903.trim.fastq.gz
+kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index -o k_flower_SRR17655908 --single -l 180 -s 20 flower_SRR17655908.trim.fastq.gz
+kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index -o k_fruit_SRR17655900 --single -l 180 -s 20 fruit_SRR17655900.trim.fastq.gz
+kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index -o k_fruit_SRR17655901  --single -l 180 -s 20 fruit_SRR17655901.trim.fastq.gz
+kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index -o k_fruit_SRR17655904 --single -l 180 -s 20 fruit_SRR17655904.trim.fastq.gz
+
+multiqc -d .
+
+sudo apt install samtools 
+
+samtools sort flower_SRR17655902.sam -o flower_SRR17655902.bam 
+samtools index flower_SRR17655902.bam 
+
+samtools sort flower_SRR17655903.sam -o flower_SRR17655903.bam 
+samtools index flower_SRR17655903.bam 
+
+samtools sort flower_SRR17655908.sam -o flower_SRR17655908.bam 
+samtools index flower_SRR17655908.bam 
+
+samtools sort fruit_SRR17655900.sam -o fruit_SRR17655900.bam 
+samtools index fruit_SRR17655900.bam
+
+samtools sort fruit_SRR17655901.sam -o fruit_SRR17655901.bam 
+samtools index fruit_SRR17655901.bam 
+
+wget https://github.com/pachterlab/kallisto/releases/download/v0.48.0/kallisto_linux-v0.48.0.tar.gz
+tar -xzvf kallisto_linux-v0.48.0.tar.gz 
+
+./kallisto/kallisto index -i Solanum_lycopersicum.SL3.0.cdna.all.index Solanum_lycopersicum.SL3.0.cdna.all.fa
+
+./kallisto/kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index-o k_SRR17655898 --single -l 180 -s 20 SRR17655898.trim.fastq.gz 
+./kallisto/kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index-o k_SRR17655903 --single -l 180 -s 20 SRR17655903.trim.fastq.gz 
+./kallisto/kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index-o k_SRR17655906 --single -l 180 -s 20 SRR17655906.trim.fastq.gz 
+./kallisto/kallisto quant -i Solanum_lycopersicum.SL3.0.cdna.all.index-o k_SRR17655907 --single -l 180 -s 20 SRR17655907.trim.fastq.gz
+
+
+

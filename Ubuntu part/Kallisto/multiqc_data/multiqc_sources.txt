@@ -1,0 +1,13 @@
+Module	Section	Sample Name	Source
+featureCounts	all_sections	flower_SRR17655902	/home/natalia/assignment/counts.summary
+featureCounts	all_sections	flower_SRR17655903	/home/natalia/assignment/counts.summary
+featureCounts	all_sections	flower_SRR17655908	/home/natalia/assignment/counts.summary
+featureCounts	all_sections	fruit_SRR17655900	/home/natalia/assignment/counts.summary
+featureCounts	all_sections	fruit_SRR17655901	/home/natalia/assignment/counts.summary
+featureCounts	all_sections	fruit_SRR17655904	/home/natalia/assignment/counts.summary
+FastQC	all_sections	fruit_SRR17655904	/home/natalia/assignment/fruit_SRR17655904.trim_fastqc.zip
+FastQC	all_sections	flower_SRR17655903	/home/natalia/assignment/flower_SRR17655903.trim_fastqc.zip
+FastQC	all_sections	flower_SRR17655908	/home/natalia/assignment/flower_SRR17655908.trim_fastqc.zip
+FastQC	all_sections	flower_SRR17655902	/home/natalia/assignment/flower_SRR17655902.trim_fastqc.zip
+FastQC	all_sections	fruit_SRR17655900	/home/natalia/assignment/fruit_SRR17655900.trim_fastqc.zip
+FastQC	all_sections	fruit_SRR17655901	/home/natalia/assignment/fruit_SRR17655901.trim_fastqc.zip
